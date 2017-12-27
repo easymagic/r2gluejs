@@ -2,6 +2,9 @@
 
 MVVM Library
 
+Dependency:
+*jQuery*
+
 Usage:
 1. Include the script via script-tag
 2. Create your view-model
@@ -13,7 +16,7 @@ Example:
 <head>
 	<title></title>
 	<script type="text/javascript" src="jquery.js"></script>
-	<script type="text/javascript" src="mvvm.js"></script>
+	<script type="text/javascript" src="r2gluejs.js"></script>
 </head>
 <body>
 
