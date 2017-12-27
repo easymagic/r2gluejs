@@ -1,6 +1,6 @@
 # r2gluejs
 
-MVVM Library
+MVVM Library inspired by knockoutjs.
 
 Dependency:
 *jQuery*
