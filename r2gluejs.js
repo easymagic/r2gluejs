@@ -330,6 +330,109 @@ var ui = {};
 
     };
 
+    ui.computed = function(fn,dependency){
+
+    	var value = ui.observable(fn());
+
+    	dependency.forEach(function(item){
+    		item.subscribe(function(vl){
+               value(fn());
+    		});
+    	});
+
+
+    	return value;
+
+    };
+
 
 
 })(jQuery,window,undefined,ui);
+
+
+//extensions here
+	ui.add_binding('visible',function($el,obs){
+    
+      function update_visibility(){
+	      if (obs()){
+	        $el.show();
+	      }else if (!obs()){
+	        $el.hide();
+	      }      	
+      }
+
+      update_visibility();
+
+      obs.subscribe(function(vl,garbage_index){
+        if (ui.contains($el)){
+          update_visibility(); 
+        }else{
+          obs.garbage(garbage_index);
+        }       
+      });
+
+	});
+
+	ui.add_binding('checked',function($el,obs){
+
+		function update_checked_state(){
+			if (obs()){
+            
+              if (!$el.is(':checked')){
+                $el.trigger('click');
+              }
+			
+			}else{
+
+              if ($el.is(':checked')){
+                $el.trigger('click');
+              }
+
+			}
+
+		}
+
+		$el.on('click',function(){
+			if ($el.is(':checked')){
+              obs(true);
+			}else{
+			  obs(false);	
+			}
+		});
+
+		obs.subscribe(function(vl,garbage_index){
+           
+           if (ui.contains($el)){
+              update_checked_state();
+           }else{
+              obs.garbage(garbage_index);
+           }
+           
+		});
+
+		update_checked_state();
+
+	});
+
+	ui.add_binding('disabled',function($el,obs){
+
+		function update_state(){
+          if (obs()){
+            $el.attr('disabled','disabled');
+          }else{
+            $el.removeAttr('disabled');
+          }
+		}
+
+
+		obs.subscribe(function(vl,garbage_index){
+			if (ui.contains($el)){
+              update_state();
+			}else{
+              ui.garbage(garbage_index);
+			}
+		});
+
+		update_state();
+
+	});
